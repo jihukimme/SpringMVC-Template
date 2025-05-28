@@ -31,6 +31,15 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### 비어있는 디렉토리 유지용 ###
+!resources/*
+!repository/*
+!dao/*
+!dto/*
+!service/*
+!controller/*
+!entity/*
+
 ### VS Code ###
 .vscode/
 
