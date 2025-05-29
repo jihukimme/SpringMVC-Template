@@ -1,41 +1,58 @@
 package org.example.SpringMVCTemplate.simpleAuth.controller;
 
-import org.example.SpringMVCTemplate.simpleAuth.dto.UserDTO;
+import org.example.SpringMVCTemplate.simpleAuth.repository.UserRepository;
+import org.example.SpringMVCTemplate.simpleAuth.entity.User;
+import org.example.SpringMVCTemplate.simpleAuth.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.net.URLEncoder;
 
 @Controller
 public class LoginController {
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String showLoginForm() {
-        return "loginForm";
-    }
+    @Autowired
+    UserService userService;
 
+    @GetMapping("/login")
+    public String loginForm() {return "loginForm";}
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@ModelAttribute UserDTO userDTO, Model model, HttpSession session) {
-        String id = userDTO.getId();
-        String password = userDTO.getPassword();
-
-        // 예시: 계정이 admin / 비밀번호 1234 일 때만 로그인 성공 처리
-        if ("admin".equals(id) && "1234".equals(password)) {
-            session.setAttribute("loginUser", userDTO);
-            return "redirect:/"; // 로그인 성공 → 홈으로 리다이렉트
-        } else {
-            model.addAttribute("errorMsg", "아이디 또는 비밀번호가 틀렸습니다");
-            return "loginForm"; // 실패 → 로그인 폼 다시 보여주기
-        }
-    }
-
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.invalidate(); // 세션 무효화
-        return "redirect:/loginForm"; // 로그인 페이지로 이동
+        // 1. 세션을 종료
+        session.invalidate();
+        // 2. 홈으로 이동
+        return "redirect:/";
+    }
+
+    @PostMapping("/login")
+    public String login(String id, String pwd, String toURL, boolean rememberId,
+                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        if (!userService.login(id, pwd)) {
+            String msg = URLEncoder.encode("id 또는 pwd가 일치하지 않습니다.", "utf-8");
+            return "redirect:/login?msg=" + msg;
+        }
+
+        HttpSession session = request.getSession();
+        session.setAttribute("id", id);
+
+        if (rememberId) {
+            response.addCookie(new Cookie("id", id));
+        } else {
+            Cookie cookie = new Cookie("id", id);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+
+        toURL = (toURL == null || toURL.isEmpty()) ? "/" : toURL;
+        return "redirect:" + toURL;
     }
 }
+
