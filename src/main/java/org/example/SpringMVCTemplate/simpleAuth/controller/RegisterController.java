@@ -1,12 +1,11 @@
 package org.example.SpringMVCTemplate.simpleAuth.controller;
 
-import org.example.SpringMVCTemplate.simpleAuth.dto.UserDTO;
+import org.example.SpringMVCTemplate.simpleAuth.dto.UserDto;
 import org.example.SpringMVCTemplate.simpleAuth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,20 +31,14 @@ public class RegisterController {
     }
 
     @PostMapping("/add")
-    public String register(@ModelAttribute UserDTO userDto, BindingResult result, Model model) {
-        System.out.println("BindingResult = " + result);
-        System.out.println("UserDTO = " + userDto);
-
-        // 유효성 검사 실패 시 다시 폼 보여주기
-        if (result.hasErrors()) {
-            return "registerForm";
-        }
+    public String register(@ModelAttribute UserDto userDto, Model model) {
+        System.out.println("UserDTO = " + userDto); // @ModelAttribute를 통해 바인딩만 할 뿐, JSP 렌더링에 필요한 model data는 생성하지 않음
 
         // 회원가입 시도
         boolean success = userService.register(userDto);
 
         if (success) {
-            return "registerInfo";
+            return "userInfo";
         } else {
             model.addAttribute("errorMsg", "회원가입에 실패했습니다. 다시 시도해주세요.");
             return "registerForm";

@@ -1,7 +1,7 @@
-package org.example.SpringMVCTemplate.simpleAuth.repository.impl;
+package org.example.SpringMVCTemplate.simpleAuth.dao.impl;
 
-import org.example.SpringMVCTemplate.simpleAuth.repository.UserRepository;
-import org.example.SpringMVCTemplate.simpleAuth.entity.User;
+import org.example.SpringMVCTemplate.simpleAuth.dao.UserDao;
+import org.example.SpringMVCTemplate.simpleAuth.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 @Repository
-public class UserRepositoryImpl implements UserRepository {
+public class UserDaoImpl implements UserDao {
     @Autowired
     DataSource ds;
 
@@ -47,8 +47,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User selectUser(String id) {
-        User user = null;
+    public UserEntity selectUser(String id) {
+        UserEntity user = null;
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -64,7 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
             rs = pstmt.executeQuery(); //  select
 
             if (rs.next()) {
-                user = new User();
+                user = new UserEntity();
                 user.setId(rs.getString(1));
                 user.setPwd(rs.getString(2));
                 user.setName(rs.getString(3));
@@ -89,7 +89,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 사용자 정보를 user_info테이블에 저장하는 메서드
     @Override
-    public int insertUser(User user) {
+    public int insertUser(UserEntity user) {
         int rowCnt = FAIL;
 
         Connection conn = null;
@@ -120,7 +120,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 매개변수로 받은 사용자 정보로 user_info테이블을 update하는 메서드
     @Override
-    public int updateUser(User user) {
+    public int updateUser(UserEntity user) {
         int rowCnt = FAIL; //  insert, delete, update
 
 //        Connection conn = null;
@@ -134,7 +134,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (
                 Connection conn = ds.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql); // SQL Injection공격, 성능향상
-        ){
+        ) {
             pstmt.setString(1, user.getPwd());
             pstmt.setString(2, user.getName());
             pstmt.setString(3, user.getEmail());
@@ -163,7 +163,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     private void close(AutoCloseable... acs) {
-        for(AutoCloseable ac :acs)
-            try { if(ac!=null) ac.close(); } catch(Exception e) { e.printStackTrace(); }
+        for (AutoCloseable ac : acs)
+            try {
+                if (ac != null) ac.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 }

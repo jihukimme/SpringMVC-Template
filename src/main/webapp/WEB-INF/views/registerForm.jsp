@@ -68,8 +68,7 @@
   <title>Register</title>
 </head>
 <body>
-<!-- form action="<c:url value="/register/add"/>" method="POST" onsubmit="return formCheck(this)"-->
-<form:form modelAttribute="user">
+<form method="post" action="${pageContext.request.contextPath}/register/add">
   <div class="title">Register</div>
   <div id="msg" class="msg"><form:errors path="id"/></div>
   <label for="">아이디</label>
@@ -88,7 +87,7 @@
     <label><input type="checkbox" name="sns" value="instagram"/>인스타그램</label>
   </div>
   <button>회원 가입</button>
-</form:form>
+</form>
 <script>
   function formCheck(frm) {
     var msg ='';
