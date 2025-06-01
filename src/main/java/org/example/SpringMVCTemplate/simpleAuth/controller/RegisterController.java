@@ -16,8 +16,12 @@ import java.util.Date;
 @RequestMapping("/register")
 public class RegisterController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    @Autowired // 생성자를 통한 의존성 주입
+    public RegisterController(UserService userService) {
+        this.userService = userService;
+    }
 
     @InitBinder
     public void toDate(WebDataBinder binder) {

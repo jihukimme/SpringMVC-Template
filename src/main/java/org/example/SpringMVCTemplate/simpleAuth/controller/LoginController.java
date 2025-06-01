@@ -15,8 +15,12 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LoginController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    @Autowired // 생성자를 통한 의존성 주입
+    public LoginController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/login")
     public String loginForm() {
