@@ -30,7 +30,3 @@
 - MySQL
 - Log4j2 (SLF4J 연동)
 - Tomcat 9 이상 (WAR 배포용)
-
-
-- Spring MVC 설정
-  - 
