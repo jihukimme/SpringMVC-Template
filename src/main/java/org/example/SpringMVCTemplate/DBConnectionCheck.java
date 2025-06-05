@@ -6,7 +6,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import javax.sql.DataSource;
 import java.sql.*;
 
-public class DBConnectionTest {
+public class DBConnectionCheck {
     public static void main(String[] args) throws Exception {
 //        try {
 //            Class.forName("com.mysql.cj.jdbc.Driver");
@@ -41,10 +41,13 @@ public class DBConnectionTest {
 //        }
 
 
+        // 수동 주입 방법
+        // root-context.xml에서 DataSource관련 Bean을 가져옴
         ApplicationContext ac = new GenericXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/**/root-context.xml");
         DataSource ds = ac.getBean(DataSource.class);
 
-        Connection conn = ds.getConnection(); // 데이터베이스의 연결을 얻는다.
+        // 데이터베이스의 연결을 얻는다.
+        Connection conn = ds.getConnection();
 
         System.out.println("conn = " + conn);
     } // main()

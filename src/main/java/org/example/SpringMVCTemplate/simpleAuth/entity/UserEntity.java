@@ -13,6 +13,18 @@ public class UserEntity {
     private String sns;
     private Date reg_date;
 
+    public UserEntity() {}
+
+    public UserEntity(String id, String pwd, String name, String email, Date birth, String sns, Date reg_date) {
+        this.id = id;
+        this.pwd = pwd;
+        this.name = name;
+        this.email = email;
+        this.birth = birth;
+        this.sns = sns;
+        this.reg_date = reg_date;
+    }
+
     public String getId() {
         return id;
     }
