@@ -4,7 +4,7 @@ import org.example.SpringMVCTemplate.simpleAuth.dto.UserDto;
 
 import java.util.Date;
 
-public class UserEntity {
+public class User {
     private String id;
     private String pwd;
     private String name;
@@ -13,9 +13,9 @@ public class UserEntity {
     private String sns;
     private Date reg_date;
 
-    public UserEntity() {}
+    public User() {}
 
-    public UserEntity(String id, String pwd, String name, String email, Date birth, String sns, Date reg_date) {
+    public User(String id, String pwd, String name, String email, Date birth, String sns, Date reg_date) {
         this.id = id;
         this.pwd = pwd;
         this.name = name;
@@ -81,7 +81,7 @@ public class UserEntity {
         this.reg_date = reg_date;
     }
 
-    public UserDto toDto(UserEntity user) {
+    public UserDto toDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setPwd(user.getPwd());

@@ -1,6 +1,6 @@
 package org.example.SpringMVCTemplate.simpleAuth.dto;
 
-import org.example.SpringMVCTemplate.simpleAuth.entity.UserEntity;
+import org.example.SpringMVCTemplate.simpleAuth.entity.User;
 
 import java.util.Date;
 
@@ -69,8 +69,8 @@ public class UserDto {
         this.reg_date = reg_date;
     }
 
-    public UserEntity toEntity(UserDto userDto) {
-        UserEntity user = new UserEntity();
+    public User toEntity(UserDto userDto) {
+        User user = new User();
         user.setId(userDto.getId());
         user.setPwd(userDto.getPwd());
         user.setName(userDto.getName());

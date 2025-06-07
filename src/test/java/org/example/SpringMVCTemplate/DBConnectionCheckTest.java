@@ -2,9 +2,10 @@ package org.example.SpringMVCTemplate;
 
 import static org.junit.Assert.*;
 
-import org.example.SpringMVCTemplate.simpleAuth.entity.UserEntity;
+import org.example.SpringMVCTemplate.simpleAuth.entity.User;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -29,14 +30,14 @@ public class DBConnectionCheckTest {
 
     private final String TEST_USER_ID = "testuser";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         deleteUser(TEST_USER_ID);
     }
 
     @Test
     public void insertUserTest() throws Exception {
-        UserEntity user = new UserEntity(TEST_USER_ID, "pass", "테스터", "test@ex.com", new Date(), "sns", new Date());
+        User user = new User(TEST_USER_ID, "pass", "테스터", "test@ex.com", new Date(), "sns", new Date());
         int result = insertUser(user);
         assertEquals("사용자 삽입 실패", 1, result);
     }
@@ -44,8 +45,8 @@ public class DBConnectionCheckTest {
     @Test
     public void selectUserTest() throws Exception {
         // Insert는 따로 테스트되므로 여기선 데이터가 있다고 가정
-        insertUser(new UserEntity(TEST_USER_ID, "1234", "홍길동", "test@ex.com", new Date(), "sns", new Date()));
-        UserEntity user = selectUser(TEST_USER_ID);
+        insertUser(new User(TEST_USER_ID, "1234", "홍길동", "test@ex.com", new Date(), "sns", new Date()));
+        User user = selectUser(TEST_USER_ID);
         assertNotNull("사용자 조회 실패", user);
         assertEquals(TEST_USER_ID, user.getId());
     }
@@ -55,7 +56,7 @@ public class DBConnectionCheckTest {
         int deleted = deleteUser(TEST_USER_ID);
         assertEquals("존재하지 않는 사용자 삭제 결과", 0, deleted);
 
-        insertUser(new UserEntity(TEST_USER_ID, "pass", "이름", "mail@mail.com", new Date(), "sns", new Date()));
+        insertUser(new User(TEST_USER_ID, "pass", "이름", "mail@mail.com", new Date(), "sns", new Date()));
         deleted = deleteUser(TEST_USER_ID);
         assertEquals("사용자 삭제 실패", 1, deleted);
 
@@ -71,7 +72,7 @@ public class DBConnectionCheckTest {
 
     // ================== 헬퍼 메서드 ===================
 
-    private int insertUser(UserEntity user) throws Exception {
+    private int insertUser(User user) throws Exception {
         String sql = "INSERT INTO user (id, pwd, name, email, birth, sns, reg_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = ds.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -86,14 +87,14 @@ public class DBConnectionCheckTest {
         }
     }
 
-    private UserEntity selectUser(String id) throws Exception {
+    private User selectUser(String id) throws Exception {
         String sql = "SELECT * FROM user WHERE id = ?";
         try (Connection conn = ds.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return new UserEntity(
+                    return new User(
                             rs.getString("id"),
                             rs.getString("pwd"),
                             rs.getString("name"),

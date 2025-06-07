@@ -1,7 +1,7 @@
 package org.example.SpringMVCTemplate.simpleAuth.dao.impl;
 
 import org.example.SpringMVCTemplate.simpleAuth.dao.UserDao;
-import org.example.SpringMVCTemplate.simpleAuth.entity.UserEntity;
+import org.example.SpringMVCTemplate.simpleAuth.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -47,8 +47,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserEntity selectUser(String id) {
-        UserEntity user = null;
+    public User selectUser(String id) {
+        User user = null;
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -64,7 +64,7 @@ public class UserDaoImpl implements UserDao {
             rs = pstmt.executeQuery(); //  select
 
             if (rs.next()) {
-                user = new UserEntity();
+                user = new User();
                 user.setId(rs.getString(1));
                 user.setPwd(rs.getString(2));
                 user.setName(rs.getString(3));
@@ -89,7 +89,7 @@ public class UserDaoImpl implements UserDao {
 
     // 사용자 정보를 user_info테이블에 저장하는 메서드
     @Override
-    public int insertUser(UserEntity user) {
+    public int insertUser(User user) {
         int rowCnt = FAIL;
 
         Connection conn = null;
@@ -120,7 +120,7 @@ public class UserDaoImpl implements UserDao {
 
     // 매개변수로 받은 사용자 정보로 user_info테이블을 update하는 메서드
     @Override
-    public int updateUser(UserEntity user) {
+    public int updateUser(User user) {
         int rowCnt = FAIL; //  insert, delete, update
 
 //        Connection conn = null;
